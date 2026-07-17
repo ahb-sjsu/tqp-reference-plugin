@@ -1,5 +1,12 @@
 # tqp-reference-plugin
 
+[![Tests](https://img.shields.io/github/actions/workflow/status/ahb-sjsu/tqp-reference-plugin/ci.yml?label=tests)](https://github.com/ahb-sjsu/tqp-reference-plugin/actions)
+[![Python versions](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue.svg)](https://github.com/ahb-sjsu/tqp-reference-plugin)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Linting: ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![turboquant-pro](https://img.shields.io/badge/turboquant--pro-%E2%89%A51.8-8A2BE2.svg)](https://github.com/ahb-sjsu/turboquant-pro)
+
 The **reference out-of-tree quantizer plugin** for
 [turboquant-pro](https://github.com/ahb-sjsu/turboquant-pro).
 
@@ -123,6 +130,10 @@ That is the whole loop: implement two methods, add one entry-point line, and the
 entire certification + conformance toolkit works on your format on day one. Add
 `grid_params`/`codes` when you want the fused decode (see `plugin.py` in this
 repo for the exact, conformance-passing form).
+
+For the deep version — every optional capability, all five conformance checks
+explained, certification, testing, and publishing — see
+**[`docs/GUIDE.md`](docs/GUIDE.md)**.
 
 ## Certification
 

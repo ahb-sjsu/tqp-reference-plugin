@@ -32,8 +32,14 @@ tqp_reference = "tqp_reference.plugin:SPEC"
 [tool.hatch.build.targets.wheel]
 packages = ["tqp_reference"]
 
-[tool.black]
+[tool.ruff]
+target-version = "py310"
 line-length = 88
 
 [tool.ruff.lint]
-select = ["E", "F", "I", "W"]
+# Match turboquant-pro's rule set.
+select = ["E", "F", "W", "I", "B", "UP"]
+
+[tool.black]
+target-version = ["py310"]
+line-length = 88
