@@ -1,0 +1,39 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "tqp-reference-plugin"
+version = "0.1.0"
+description = "The reference out-of-tree quantizer plugin for turboquant-pro — proves the plugin ecosystem (entry-point discovery, conformance, certification)."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Andrew H. Bond" }]
+keywords = ["quantization", "turboquant", "plugin", "conformance"]
+# The plugin protocol + conformance kit + `tqp` CLI first ship in 1.8 (they are
+# on master now; 1.7.0 predates them). Until 1.8 is on PyPI, install
+# turboquant-pro from git — see the README and CI.
+dependencies = ["numpy", "turboquant-pro>=1.8"]
+
+[project.optional-dependencies]
+dev = ["pytest", "ruff", "black"]
+
+[project.urls]
+Homepage = "https://github.com/ahb-sjsu/tqp-reference-plugin"
+"Main project" = "https://github.com/ahb-sjsu/turboquant-pro"
+
+# The one line that makes this out-of-tree package discoverable: turboquant-pro
+# enumerates this entry-point group and registers whatever PluginSpec it finds,
+# with zero code in the main tree.
+[project.entry-points."turboquant_pro.plugins"]
+tqp_reference = "tqp_reference.plugin:SPEC"
+
+[tool.hatch.build.targets.wheel]
+packages = ["tqp_reference"]
+
+[tool.black]
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]

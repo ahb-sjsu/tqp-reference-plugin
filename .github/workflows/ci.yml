@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  conformance:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install turboquant-pro (>=1.8; from git until it hits PyPI)
+        # The plugin protocol + conformance kit + `tqp` CLI first ship in 1.8.
+        # Master currently builds 1.8.0.dev0 (a pre-release, so it does not
+        # satisfy a bare `>=1.8`); installing it here first and then the plugin
+        # with --no-deps keeps the honest `>=1.8` floor in pyproject while
+        # working today. Once 1.8 is on PyPI: `pip install turboquant-pro>=1.8`
+        # and drop --no-deps.
+        run: |
+          python -m pip install --upgrade pip
+          pip install "turboquant-pro @ git+https://github.com/ahb-sjsu/turboquant-pro.git@master"
+
+      - name: Install this plugin (deps already satisfied above)
+        run: |
+          pip install pytest ruff black
+          pip install --no-deps -e .
+
+      - name: Lint
+        run: |
+          ruff check .
+          black --check .
+
+      - name: Unit + conformance + discovery tests
+        run: pytest -q
+
+      # The Phase-5 proof, exercised through the CLI exactly as a user would:
+      # entry-point discovery + the executable conformance kit, from a package
+      # that lives entirely outside the turboquant-pro tree.
+      - name: tqp plugin list discovers the plugin
+        run: tqp plugin list | grep tqp_reference
+
+      - name: tqp plugin conformance passes
+        run: tqp plugin conformance tqp_reference
+
+      - name: certification integration
+        run: python examples/certify_demo.py
